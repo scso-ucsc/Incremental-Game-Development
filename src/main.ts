@@ -31,7 +31,7 @@ newDiv.appendChild(styleElementGrid);
 function createButton() {
   const button = document.createElement("button"); //Creating button element
 
-  button.innerText = "🍬 Click me!"; //Assigning variables
+  button.innerText = "🍬 Click on the candy!!!"; //Assigning variables
   button.id = "mainButton";
   button.className = "button_main";
 
