@@ -57,7 +57,33 @@ function createCounter() {
 }
 
 //Step 3: Automatic Clicker
-setInterval(increaseCandyCount, 1000); //Calls increaseCandyCount() every second
+//setInterval(increaseCandyCount, 1000); //Calls increaseCandyCount() every second
+//This step was commented out due to the instructions of Step 4
+
+//Step 4: Continuous Growth
+let previousTimestamp = 0;
+
+function increaseFractionalCandyCount(timestamp: number) {
+  if (previousTimestamp === 0) {
+    previousTimestamp = timestamp;
+  }
+
+  //Calculating the amount of time since the previous frame
+  const timeElapsed = timestamp - previousTimestamp;
+  previousTimestamp = timestamp;
+
+  //Incrementing based on passed time
+  const increment = timeElapsed / 1000;
+  candyCount += increment;
+
+  //Updating counter
+  if (counter) {
+    updateCountText(counter);
+  }
+  requestAnimationFrame(increaseFractionalCandyCount); //Requesting next frame
+}
+
+requestAnimationFrame(increaseFractionalCandyCount);
 
 //HELPER FUNCTIONS
 function increaseCandyCount() {
@@ -68,5 +94,5 @@ function increaseCandyCount() {
 
 function updateCountText(counter: HTMLElement) {
   //Updating the counter text
-  counter.innerText = "Candies eaten: " + candyCount.toString();
+  counter.innerText = "Candies eaten: " + candyCount.toFixed(2).toString();
 }
