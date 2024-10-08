@@ -56,6 +56,10 @@ function createCounter() {
   return newCounter;
 }
 
+//Step 3: Automatic Clicker
+setInterval(increaseCandyCount, 1000); //Calls increaseCandyCount() every second
+
+//HELPER FUNCTIONS
 function increaseCandyCount() {
   //Increasing candyCount by 1 and then updating the counter text
   candyCount += 1;
