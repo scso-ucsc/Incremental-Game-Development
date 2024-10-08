@@ -9,10 +9,8 @@ const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
-//Creating DIV to act as parent
-const newDiv = document.createElement("div");
-newDiv.id = "elementsParent";
-document.body.appendChild(newDiv); //Appending to document's body
+//Creating Global Variables
+let candyCount: number = 0;
 
 //Creating Grid to define page layout
 const styleElementGrid = document.createElement("style");
@@ -25,18 +23,46 @@ styleElementGrid.textContent = `
     }
 `;
 
-newDiv.appendChild(styleElementGrid);
+app.appendChild(styleElementGrid);
 
 //Step 1: Creating a button
+const button: HTMLElement = createButton();
+button.addEventListener("click", increaseCandyCount);
+app.appendChild(button); //Appending button to webpage app
+
 function createButton() {
-  const button = document.createElement("button"); //Creating button element
+  const newButton = document.createElement("button"); //Creating button element
 
-  button.innerText = "🍬 Click on the candy!!!"; //Assigning variables
-  button.id = "mainButton";
-  button.className = "button_main";
-
-  newDiv.appendChild(button); //Appending button to newDiv
+  newButton.innerText = "🍬 Eat the candy!!!"; //Assigning variables
+  newButton.id = "mainButton";
+  newButton.className = "button_main";
+  return newButton;
 }
 
-//Execute Page
-createButton();
+//Step 2: Clicking increases counter
+const counter: HTMLElement = createCounter();
+app.appendChild(counter);
+
+function createCounter() {
+  //Creating counter
+  const newCounter = document.createElement("counter");
+  newCounter.style.display = "flex";
+  newCounter.style.justifyContent = "center";
+  newCounter.style.alignItems = "center";
+  newCounter.style.height = "10vh";
+  newCounter.style.fontSize = "30px";
+
+  updateCountText(newCounter);
+  return newCounter;
+}
+
+function increaseCandyCount() {
+  //Increasing candyCount by 1 and then updating the counter text
+  candyCount += 1;
+  updateCountText(counter);
+}
+
+function updateCountText(counter: HTMLElement) {
+  //Updating the counter text
+  counter.innerText = "Candies eaten: " + candyCount.toString();
+}
