@@ -11,6 +11,7 @@ app.append(header);
 
 //Creating Global Variables
 let candyCount: number = 0;
+let autoChomperCount: number = 0;
 
 //Creating Grid to define page layout
 const styleElementGrid = document.createElement("style");
@@ -73,7 +74,7 @@ function increaseFractionalCandyCount(timestamp: number) {
   previousTimestamp = timestamp;
 
   //Incrementing based on passed time
-  const increment = timeElapsed / 1000;
+  const increment = (timeElapsed / 1000) * autoChomperCount;
   candyCount += increment;
 
   //Updating counter
@@ -83,7 +84,24 @@ function increaseFractionalCandyCount(timestamp: number) {
   requestAnimationFrame(increaseFractionalCandyCount); //Requesting next frame
 }
 
-requestAnimationFrame(increaseFractionalCandyCount);
+//Step 5: Purchasing an Upgrade
+const upgradeButton: HTMLElement = createUpgradeButton();
+upgradeButton.addEventListener("click", activateAutoChomper);
+app.appendChild(upgradeButton); //Appending button to webpage app
+
+function createUpgradeButton() {
+  const newButton = document.createElement("button"); //Creating button element
+
+  newButton.innerText = "Automatic 🍬 Chomper!!!"; //Assigning variables
+  newButton.id = "upgradeButton";
+  newButton.className = "button_upgrade";
+  return newButton;
+}
+
+const upgradeButtonElement = document.getElementById(
+  "upgradeButton"
+) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
+setInterval(checkCandyCount, 0); //Constantly check if count is greater than 10
 
 //HELPER FUNCTIONS
 function increaseCandyCount() {
@@ -95,4 +113,19 @@ function increaseCandyCount() {
 function updateCountText(counter: HTMLElement) {
   //Updating the counter text
   counter.innerText = "Candies eaten: " + candyCount.toFixed(2).toString();
+}
+
+function checkCandyCount() {
+  //Checks if player has eaten enough candy to purchase the upgrade
+  if (candyCount >= 10) {
+    upgradeButtonElement.disabled = false;
+  } else {
+    upgradeButtonElement.disabled = true;
+  }
+}
+
+function activateAutoChomper() {
+  autoChomperCount += 1;
+  candyCount -= 10;
+  requestAnimationFrame(increaseFractionalCandyCount); //Activating automatic increments
 }
