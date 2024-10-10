@@ -95,7 +95,7 @@ function increaseFractionalCandyCount(timestamp: number) {
 const upgradeButton1: HTMLElement = createUpgradeButton(
   `Automatic 🍬 Chomper!!! (Cost: ${autoChomperCost})`,
   "upgradeButton1",
-  "button_upgrade1"
+  "button_upgrade1",
 );
 upgradeButton1.addEventListener("click", activateAutoChomper);
 app.appendChild(upgradeButton1); //Appending button to webpage app
@@ -110,7 +110,7 @@ function createUpgradeButton(innerText: string, id: string, className: string) {
 }
 
 const upgradeButtonElement1 = document.getElementById(
-  "upgradeButton1"
+  "upgradeButton1",
 ) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
 setInterval(checkCandyCount, 0); //Constantly check if count is greater than 10
 
@@ -118,7 +118,7 @@ setInterval(checkCandyCount, 0); //Constantly check if count is greater than 10
 const upgradeButton2: HTMLElement = createUpgradeButton(
   `Super Automatic 🍬 Chomper!!! (Cost: ${superChomperCost})`,
   "upgradeButton2",
-  "button_upgrade2"
+  "button_upgrade2",
 );
 upgradeButton2.addEventListener("click", activateSuperChomper);
 app.appendChild(upgradeButton2); //Appending button to webpage app
@@ -126,17 +126,17 @@ app.appendChild(upgradeButton2); //Appending button to webpage app
 const upgradeButton3: HTMLElement = createUpgradeButton(
   `Giga Automatic 🍬 Chomper!!! (Cost: ${gigaChomperCost})`,
   "upgradeButton3",
-  "button_upgrade3"
+  "button_upgrade3",
 );
 upgradeButton3.addEventListener("click", activateGigaChomper);
 app.appendChild(upgradeButton3); //Appending button to webpage app
 
 const upgradeButtonElement2 = document.getElementById(
-  "upgradeButton2"
+  "upgradeButton2",
 ) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
 
 const upgradeButtonElement3 = document.getElementById(
-  "upgradeButton3"
+  "upgradeButton3",
 ) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
 
 const playerStatsTitle: HTMLElement = document.createElement("h2"); //Creating Statistics Elements
