@@ -14,9 +14,9 @@ let candyCount: number = 0;
 let autoChomperCount: number = 0;
 let superChomperCount: number = 0;
 let gigaChomperCount: number = 0;
-const autoChomperCost: number = 10;
-const superChomperCost: number = 100;
-const gigaChomperCost: number = 1000;
+let autoChomperCost: number = 10;
+let superChomperCost: number = 100;
+let gigaChomperCost: number = 1000;
 let currentGrowthRate: number = 0;
 let autoGrowth: boolean = false;
 
@@ -93,9 +93,9 @@ function increaseFractionalCandyCount(timestamp: number) {
 
 //Step 5: Purchasing an Upgrade
 const upgradeButton1: HTMLElement = createUpgradeButton(
-  `Automatic 🍬 Chomper!!! (Cost: ${autoChomperCost})`,
+  `Automatic 🍬 Chomper!!! (Cost: ${autoChomperCost.toFixed(2)})`,
   "upgradeButton1",
-  "button_upgrade1",
+  "button_upgrade1"
 );
 upgradeButton1.addEventListener("click", activateAutoChomper);
 app.appendChild(upgradeButton1); //Appending button to webpage app
@@ -110,33 +110,33 @@ function createUpgradeButton(innerText: string, id: string, className: string) {
 }
 
 const upgradeButtonElement1 = document.getElementById(
-  "upgradeButton1",
+  "upgradeButton1"
 ) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
 setInterval(checkCandyCount, 0); //Constantly check if count is greater than 10
 
 //Step 6: Multiple Upgrades and Status
 const upgradeButton2: HTMLElement = createUpgradeButton(
-  `Super Automatic 🍬 Chomper!!! (Cost: ${superChomperCost})`,
+  `Super Automatic 🍬 Chomper!!! (Cost: ${superChomperCost.toFixed(2)})`,
   "upgradeButton2",
-  "button_upgrade2",
+  "button_upgrade2"
 );
 upgradeButton2.addEventListener("click", activateSuperChomper);
 app.appendChild(upgradeButton2); //Appending button to webpage app
 
 const upgradeButton3: HTMLElement = createUpgradeButton(
-  `Giga Automatic 🍬 Chomper!!! (Cost: ${gigaChomperCost})`,
+  `Giga Automatic 🍬 Chomper!!! (Cost: ${gigaChomperCost.toFixed(2)})`,
   "upgradeButton3",
-  "button_upgrade3",
+  "button_upgrade3"
 );
 upgradeButton3.addEventListener("click", activateGigaChomper);
 app.appendChild(upgradeButton3); //Appending button to webpage app
 
 const upgradeButtonElement2 = document.getElementById(
-  "upgradeButton2",
+  "upgradeButton2"
 ) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
 
 const upgradeButtonElement3 = document.getElementById(
-  "upgradeButton3",
+  "upgradeButton3"
 ) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
 
 const playerStatsTitle: HTMLElement = document.createElement("h2"); //Creating Statistics Elements
@@ -162,6 +162,21 @@ app.appendChild(autoChomperStatsText);
 app.appendChild(superChomperStatsText);
 app.appendChild(gigaChomperStatsText);
 
+//Step 7: Price Increase
+function increaseUpgradeCost(upgradeType: string) {
+  if (upgradeType === "auto") {
+    autoChomperCost *= 1.15;
+    updateUpgradeButtonText("auto");
+  } else if (upgradeType === "super") {
+    superChomperCost *= 1.15;
+    updateUpgradeButtonText("super");
+  } else {
+    //upgradeType === "giga"
+    gigaChomperCost *= 1.15;
+    updateUpgradeButtonText("giga");
+  }
+}
+
 //HELPER FUNCTIONS
 function increaseCandyCount() {
   //Increasing candyCount by 1 and then updating the counter text
@@ -176,19 +191,19 @@ function updateCountText(counter: HTMLElement) {
 
 function checkCandyCount() {
   //Checks if player has eaten enough candy to purchase the respective upgrade
-  if (candyCount >= 10) {
+  if (candyCount >= autoChomperCost) {
     upgradeButtonElement1.disabled = false;
   } else {
     upgradeButtonElement1.disabled = true;
   }
 
-  if (candyCount >= 100) {
+  if (candyCount >= superChomperCost) {
     upgradeButtonElement2.disabled = false;
   } else {
     upgradeButtonElement2.disabled = true;
   }
 
-  if (candyCount >= 1000) {
+  if (candyCount >= gigaChomperCost) {
     upgradeButtonElement3.disabled = false;
   } else {
     upgradeButtonElement3.disabled = true;
@@ -198,37 +213,40 @@ function checkCandyCount() {
 function activateAutoChomper() {
   autoChomperCount += 1;
   currentGrowthRate += 0.1;
-  candyCount -= 10;
+  candyCount -= autoChomperCost;
   if (autoGrowth === false) {
     requestAnimationFrame(increaseFractionalCandyCount); //Activating automatic increments if not active yet
     autoGrowth = true;
   }
   updateStatsText("rate"); //Updating Stats
   updateStatsText("auto");
+  increaseUpgradeCost("auto"); //Increasing Cost
 }
 
 function activateSuperChomper() {
   superChomperCount += 1;
   currentGrowthRate += 2;
-  candyCount -= 100;
+  candyCount -= superChomperCost;
   if (autoGrowth === false) {
     requestAnimationFrame(increaseFractionalCandyCount); //Activating automatic increments if not active yet
     autoGrowth = true;
   }
   updateStatsText("rate"); //Updating Stats
   updateStatsText("super");
+  increaseUpgradeCost("super"); //Increasing Cost
 }
 
 function activateGigaChomper() {
   gigaChomperCount += 1;
   currentGrowthRate += 50;
-  candyCount -= 1000;
+  candyCount -= gigaChomperCost;
   if (autoGrowth === false) {
     requestAnimationFrame(increaseFractionalCandyCount); //Activating automatic increments if not active yet
     autoGrowth = true;
   }
   updateStatsText("rate"); //Updating Stats
   updateStatsText("giga");
+  increaseUpgradeCost("giga"); //Increasing Cost
 }
 
 function updateStatsText(upgradeType: string) {
@@ -252,4 +270,15 @@ function createStatsText() {
   newStatsText.style.height = "2vh";
   newStatsText.style.fontSize = "20px";
   return newStatsText;
+}
+
+function updateUpgradeButtonText(buttonName: string) {
+  if (buttonName === "auto") {
+    upgradeButton1.innerText = `Automatic 🍬 Chomper!!! (Cost: ${autoChomperCost.toFixed(2)})`;
+  } else if (buttonName === "super") {
+    upgradeButton2.innerText = `Super Automatic 🍬 Chomper!!! (Cost: ${superChomperCost.toFixed(2)})`;
+  } else {
+    //buttonName === "giga"
+    upgradeButton3.innerText = `Giga Automatic 🍬 Chomper!!! (Cost: ${gigaChomperCost.toFixed(2)})`;
+  }
 }
