@@ -2,8 +2,9 @@ import "./style.css";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
-const gameName = "Sugar 🍬 Rush!!!";
+const gameName = "🍬 EAT THE CANDY!!! 🍬";
 document.title = gameName;
+document.body.style.backgroundColor = "#ecc9f2";
 
 const header = document.createElement("h1");
 header.innerHTML = gameName;
@@ -33,19 +34,17 @@ styleElementGrid.textContent = `
 
 app.appendChild(styleElementGrid);
 
-//Step 1: Creating a button
-const button: HTMLElement = createButton();
-button.addEventListener("click", increaseCandyCount);
-app.appendChild(button); //Appending button to webpage app
+//Step 8: Consistent Narrative (REPLACES STEP 1)
+const imageSource = "src/eat_candy.png";
+const eatCandyButton = document.createElement("img");
+eatCandyButton.src = imageSource;
+eatCandyButton.id = "eatButton";
 
-function createButton() {
-  const newButton = document.createElement("button"); //Creating button element
-
-  newButton.innerText = "🍬 Eat the candy!!!"; //Assigning variables
-  newButton.id = "mainButton";
-  newButton.className = "button_main";
-  return newButton;
-}
+eatCandyButton.style.cursor = "pointer";
+eatCandyButton.style.width = "300px";
+eatCandyButton.style.height = "300px";
+app.appendChild(eatCandyButton);
+eatCandyButton.addEventListener("click", increaseCandyCount);
 
 //Step 2: Clicking increases counter
 const counter: HTMLElement = createCounter();
@@ -96,21 +95,28 @@ const upgradeButton1: HTMLElement = createUpgradeButton(
   `Automatic 🍬 Chomper!!! (Cost: ${autoChomperCost.toFixed(2)})`,
   "upgradeButton1",
   "button_upgrade1",
+  "#e36862"
 );
 upgradeButton1.addEventListener("click", activateAutoChomper);
 app.appendChild(upgradeButton1); //Appending button to webpage app
 
-function createUpgradeButton(innerText: string, id: string, className: string) {
+function createUpgradeButton(
+  innerText: string,
+  id: string,
+  className: string,
+  bgColour: string
+) {
   const newButton = document.createElement("button"); //Creating button element
 
   newButton.innerText = innerText; //Assigning variables
   newButton.id = id;
   newButton.className = className;
+  newButton.style.backgroundColor = bgColour;
   return newButton;
 }
 
 const upgradeButtonElement1 = document.getElementById(
-  "upgradeButton1",
+  "upgradeButton1"
 ) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
 setInterval(checkCandyCount, 0); //Constantly check if count is greater than 10
 
@@ -119,6 +125,7 @@ const upgradeButton2: HTMLElement = createUpgradeButton(
   `Super Automatic 🍬 Chomper!!! (Cost: ${superChomperCost.toFixed(2)})`,
   "upgradeButton2",
   "button_upgrade2",
+  "#ebe37a"
 );
 upgradeButton2.addEventListener("click", activateSuperChomper);
 app.appendChild(upgradeButton2); //Appending button to webpage app
@@ -127,16 +134,17 @@ const upgradeButton3: HTMLElement = createUpgradeButton(
   `Giga Automatic 🍬 Chomper!!! (Cost: ${gigaChomperCost.toFixed(2)})`,
   "upgradeButton3",
   "button_upgrade3",
+  "#7f86e3"
 );
 upgradeButton3.addEventListener("click", activateGigaChomper);
 app.appendChild(upgradeButton3); //Appending button to webpage app
 
 const upgradeButtonElement2 = document.getElementById(
-  "upgradeButton2",
+  "upgradeButton2"
 ) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
 
 const upgradeButtonElement3 = document.getElementById(
-  "upgradeButton3",
+  "upgradeButton3"
 ) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
 
 const playerStatsTitle: HTMLElement = document.createElement("h2"); //Creating Statistics Elements
@@ -186,7 +194,7 @@ function increaseCandyCount() {
 
 function updateCountText(counter: HTMLElement) {
   //Updating the counter text
-  counter.innerText = "Candies eaten: " + candyCount.toFixed(2).toString();
+  counter.innerText = "Candies Eaten: " + candyCount.toFixed(2).toString();
 }
 
 function checkCandyCount() {
