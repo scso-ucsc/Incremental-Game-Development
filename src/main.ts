@@ -35,7 +35,7 @@ styleElementGrid.textContent = `
 app.appendChild(styleElementGrid);
 
 //Step 8: Consistent Narrative (REPLACES STEP 1)
-const imageSource = "src/eat_candy.png";
+import imageSource from "./eat_candy.png";
 const eatCandyButton = document.createElement("img");
 eatCandyButton.src = imageSource;
 eatCandyButton.id = "eatButton";
