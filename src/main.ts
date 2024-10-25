@@ -1,4 +1,5 @@
 import "./style.css";
+import imageSource from "./eat_candy.png";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
@@ -19,8 +20,9 @@ let teraChomperCount: number = 0;
 let monsterChomperCount: number = 0;
 let currentGrowthRate: number = 0;
 let autoGrowth: boolean = false;
+let previousTimestamp = 0;
 
-//Step 9 and Step 10:
+//Setting Up Interface
 interface AutoChomper {
   name: string;
   cost: number;
@@ -65,34 +67,31 @@ const availableChompers: AutoChomper[] = [
   },
 ];
 
-//Creating Grid to define page layout
-const styleElementGrid = document.createElement("style");
-styleElementGrid.textContent = `
-    body {
-        display: grid;
-        place-items: center;
-        height: 100vh;
-        margin: 0
-    }
-`;
+//Main Functions
+function createStyle() {
+  const styleElementGrid = document.createElement("style");
+  styleElementGrid.textContent = `
+      body {
+          display: grid;
+          place-items: center;
+          height: 100vh;
+          margin: 0
+      }
+  `;
+  app.appendChild(styleElementGrid);
+}
 
-app.appendChild(styleElementGrid);
+function createCandyEatButton() {
+  const eatCandyButton = document.createElement("img");
+  eatCandyButton.src = imageSource;
+  eatCandyButton.id = "eatButton";
 
-//Step 8: Consistent Narrative (REPLACES STEP 1)
-import imageSource from "./eat_candy.png";
-const eatCandyButton = document.createElement("img");
-eatCandyButton.src = imageSource;
-eatCandyButton.id = "eatButton";
-
-eatCandyButton.style.cursor = "pointer";
-eatCandyButton.style.width = "300px";
-eatCandyButton.style.height = "300px";
-app.appendChild(eatCandyButton);
-eatCandyButton.addEventListener("click", increaseCandyCount);
-
-//Step 2: Clicking increases counter
-const counter: HTMLElement = createCounter();
-app.appendChild(counter);
+  eatCandyButton.style.cursor = "pointer";
+  eatCandyButton.style.width = "300px";
+  eatCandyButton.style.height = "300px";
+  app.appendChild(eatCandyButton);
+  eatCandyButton.addEventListener("click", increaseCandyCount);
+}
 
 function createCounter() {
   //Creating counter
@@ -102,13 +101,74 @@ function createCounter() {
   newCounter.style.alignItems = "center";
   newCounter.style.height = "10vh";
   newCounter.style.fontSize = "30px";
+  app.appendChild(newCounter);
 
   updateCountText(newCounter);
   return newCounter;
 }
 
-//Step 4: Continuous Growth
-let previousTimestamp = 0;
+function createUpgradeButton(
+  innerText: string,
+  id: string,
+  className: string,
+  bgColour: string
+) {
+  const newButton = document.createElement("button"); //Creating button element
+
+  newButton.innerText = innerText; //Assigning variables
+  newButton.id = id;
+  newButton.className = className;
+  newButton.style.backgroundColor = bgColour;
+  return newButton;
+}
+
+function createStatisticsTitle() {
+  const playerStatsTitle: HTMLElement = document.createElement("h2"); //Creating Statistics Elements
+  playerStatsTitle.style.display = "flex";
+  playerStatsTitle.style.justifyContent = "center";
+  playerStatsTitle.style.alignItems = "center";
+  playerStatsTitle.style.height = "10vh";
+  playerStatsTitle.style.fontSize = "26px";
+  playerStatsTitle.innerText = "Player Stats:";
+  app.appendChild(playerStatsTitle);
+}
+
+function createStatsText() {
+  const newStatsText = document.createElement("p");
+  newStatsText.style.display = "flex";
+  newStatsText.style.justifyContent = "center";
+  newStatsText.style.alignItems = "center";
+  newStatsText.style.height = "2vh";
+  newStatsText.style.fontSize = "20px";
+  return newStatsText;
+}
+
+function createDescriptionText(descSource: string) {
+  const newDescription = document.createElement("p");
+  newDescription.style.display = "flex";
+  newDescription.style.justifyContent = "center";
+  newDescription.style.alignItems = "center";
+  newDescription.style.height = "2vh";
+  newDescription.style.fontSize = "12px";
+  newDescription.innerText = getChomperDescription(descSource);
+  return newDescription;
+}
+
+function increaseCandyCount() {
+  //Increasing candyCount by 1 and then updating the counter text
+  candyCount += 1;
+  updateCountText(counter);
+}
+
+function increaseUpgradeCost(upgradeType: string) {
+  for (const chomper of availableChompers) {
+    if (chomper.name === upgradeType) {
+      chomper.cost *= 1.15;
+      updateUpgradeButtonText(chomper.name);
+      break;
+    }
+  }
+}
 
 function increaseFractionalCandyCount(timestamp: number) {
   if (previousTimestamp === 0) {
@@ -130,144 +190,34 @@ function increaseFractionalCandyCount(timestamp: number) {
   requestAnimationFrame(increaseFractionalCandyCount); //Requesting next frame
 }
 
-//Step 5: Purchasing an Upgrade
-const upgradeButton1: HTMLElement = createUpgradeButton(
-  `Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("auto").toFixed(2)})`,
-  "upgradeButton1",
-  "button_upgrade1",
-  "#e36862",
-);
-upgradeButton1.addEventListener("click", activateAutoChomper);
-app.appendChild(upgradeButton1); //Appending button to webpage app
-const autoChomperDescription: HTMLElement = createDescriptionText("auto");
-app.appendChild(autoChomperDescription);
-
-function createUpgradeButton(
-  innerText: string,
-  id: string,
-  className: string,
-  bgColour: string,
-) {
-  const newButton = document.createElement("button"); //Creating button element
-
-  newButton.innerText = innerText; //Assigning variables
-  newButton.id = id;
-  newButton.className = className;
-  newButton.style.backgroundColor = bgColour;
-  return newButton;
-}
-
-const upgradeButtonElement1 = document.getElementById(
-  "upgradeButton1",
-) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
-setInterval(checkCandyCount, 0); //Constantly check for availability of upgrades
-
-//Step 6: Multiple Upgrades and Status
-const upgradeButton2: HTMLElement = createUpgradeButton(
-  `Super Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("super").toFixed(2)})`,
-  "upgradeButton2",
-  "button_upgrade2",
-  "#ebe37a",
-);
-upgradeButton2.addEventListener("click", activateSuperChomper);
-app.appendChild(upgradeButton2); //Appending button to webpage app
-const superChomperDescription: HTMLElement = createDescriptionText("super");
-app.appendChild(superChomperDescription);
-
-const upgradeButton3: HTMLElement = createUpgradeButton(
-  `Giga Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("giga").toFixed(2)})`,
-  "upgradeButton3",
-  "button_upgrade3",
-  "#7f86e3",
-);
-upgradeButton3.addEventListener("click", activateGigaChomper);
-app.appendChild(upgradeButton3); //Appending button to webpage app
-const gigaChomperDescription: HTMLElement = createDescriptionText("giga");
-app.appendChild(gigaChomperDescription);
-
-const upgradeButton4: HTMLElement = createUpgradeButton(
-  `Tera Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("tera").toFixed(2)})`,
-  "upgradeButton4",
-  "button_upgrade4",
-  "#8bff87",
-);
-upgradeButton4.addEventListener("click", activateTeraChomper);
-app.appendChild(upgradeButton4); //Appending button to webpage app
-const teraChomperDescription: HTMLElement = createDescriptionText("tera");
-app.appendChild(teraChomperDescription);
-
-const upgradeButton5: HTMLElement = createUpgradeButton(
-  `Monster Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("monster").toFixed(2)})`,
-  "upgradeButton5",
-  "button_upgrade5",
-  "#ff9729",
-);
-upgradeButton5.addEventListener("click", activateMonsterChomper);
-app.appendChild(upgradeButton5); //Appending button to webpage app
-const monsterChomperDescription: HTMLElement = createDescriptionText("monster");
-app.appendChild(monsterChomperDescription);
-
-const upgradeButtonElement2 = document.getElementById(
-  "upgradeButton2",
-) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
-
-const upgradeButtonElement3 = document.getElementById(
-  "upgradeButton3",
-) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
-
-const upgradeButtonElement4 = document.getElementById(
-  "upgradeButton4",
-) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
-
-const upgradeButtonElement5 = document.getElementById(
-  "upgradeButton5",
-) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
-
-const playerStatsTitle: HTMLElement = document.createElement("h2"); //Creating Statistics Elements
-playerStatsTitle.style.display = "flex";
-playerStatsTitle.style.justifyContent = "center";
-playerStatsTitle.style.alignItems = "center";
-playerStatsTitle.style.height = "10vh";
-playerStatsTitle.style.fontSize = "26px";
-playerStatsTitle.innerText = "Player Stats:";
-app.appendChild(playerStatsTitle);
-
-const autoRateText: HTMLElement = createStatsText();
-updateStatsText("rate");
-app.appendChild(autoRateText);
-
-const autoChomperStatsText: HTMLElement = createStatsText();
-const superChomperStatsText: HTMLElement = createStatsText();
-const gigaChomperStatsText: HTMLElement = createStatsText();
-const teraChomperStatsText: HTMLElement = createStatsText();
-const monsterChomperStatsText: HTMLElement = createStatsText();
-updateStatsText("auto");
-updateStatsText("super");
-updateStatsText("giga");
-updateStatsText("tera");
-updateStatsText("monster");
-app.appendChild(autoChomperStatsText);
-app.appendChild(superChomperStatsText);
-app.appendChild(gigaChomperStatsText);
-app.appendChild(teraChomperStatsText);
-app.appendChild(monsterChomperStatsText);
-
-//Step 7: Price Increase
-function increaseUpgradeCost(upgradeType: string) {
-  for (const chomper of availableChompers) {
-    if (chomper.name === upgradeType) {
-      chomper.cost *= 1.15;
-      updateUpgradeButtonText(chomper.name);
-      break;
-    }
+function updateStatsText(upgradeType: string) {
+  if (upgradeType === "rate") {
+    autoRateText.innerText = `Current Growth Rate: ${currentGrowthRate.toFixed(1)} candies/sec`;
+  } else if (upgradeType === "auto") {
+    autoChomperStatsText.innerText = `No. of Auto Chompers: ${autoChomperCount}`;
+  } else if (upgradeType === "super") {
+    superChomperStatsText.innerText = `No. of Super Auto Chompers: ${superChomperCount}`;
+  } else if (upgradeType === "giga") {
+    gigaChomperStatsText.innerText = `No. of Giga Auto Chompers: ${gigaChomperCount}`;
+  } else if (upgradeType === "tera") {
+    teraChomperStatsText.innerText = `No. of Tera Auto Chompers: ${teraChomperCount}`;
+  } else {
+    monsterChomperStatsText.innerText = `No. of Monster Chompers: ${monsterChomperCount}`;
   }
 }
 
-//HELPER FUNCTIONS
-function increaseCandyCount() {
-  //Increasing candyCount by 1 and then updating the counter text
-  candyCount += 1;
-  updateCountText(counter);
+function updateUpgradeButtonText(buttonName: string) {
+  if (buttonName === "auto") {
+    upgradeButton1.innerText = `Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("auto").toFixed(2)})`;
+  } else if (buttonName === "super") {
+    upgradeButton2.innerText = `Super Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("super").toFixed(2)})`;
+  } else if (buttonName === "giga") {
+    upgradeButton3.innerText = `Giga Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("giga").toFixed(2)})`;
+  } else if (buttonName === "tera") {
+    upgradeButton4.innerText = `Tera Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("tera").toFixed(2)})`;
+  } else {
+    upgradeButton5.innerText = `Monster Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("monster").toFixed(2)})`;
+  }
 }
 
 function updateCountText(counter: HTMLElement) {
@@ -306,6 +256,33 @@ function checkCandyCount() {
   } else {
     upgradeButtonElement5.disabled = true;
   }
+}
+
+function getChomperCost(desiredChomper: string) {
+  for (const chomper of availableChompers) {
+    if (chomper.name === desiredChomper) {
+      return chomper.cost;
+    }
+  }
+  return 0;
+}
+
+function getChomperRate(desiredChomper: string) {
+  for (const chomper of availableChompers) {
+    if (chomper.name === desiredChomper) {
+      return chomper.rate;
+    }
+  }
+  return 0;
+}
+
+function getChomperDescription(desiredChomper: string) {
+  for (const chomper of availableChompers) {
+    if (chomper.name === desiredChomper) {
+      return chomper.description;
+    }
+  }
+  return "";
 }
 
 function activateAutoChomper() {
@@ -373,85 +350,105 @@ function activateMonsterChomper() {
   increaseUpgradeCost("monster"); //Increasing Cost
 }
 
-function updateStatsText(upgradeType: string) {
-  if (upgradeType === "rate") {
-    autoRateText.innerText = `Current Growth Rate: ${currentGrowthRate.toFixed(1)} candies/sec`;
-  } else if (upgradeType === "auto") {
-    autoChomperStatsText.innerText = `No. of Auto Chompers: ${autoChomperCount}`;
-  } else if (upgradeType === "super") {
-    superChomperStatsText.innerText = `No. of Super Auto Chompers: ${superChomperCount}`;
-  } else if (upgradeType === "giga") {
-    gigaChomperStatsText.innerText = `No. of Giga Auto Chompers: ${gigaChomperCount}`;
-  } else if (upgradeType === "tera") {
-    teraChomperStatsText.innerText = `No. of Tera Auto Chompers: ${teraChomperCount}`;
-  } else {
-    monsterChomperStatsText.innerText = `No. of Monster Chompers: ${monsterChomperCount}`;
-  }
-}
+//Creating Grid, Counter and Buttons
+createStyle();
+createCandyEatButton();
+const counter: HTMLElement = createCounter();
 
-function createStatsText() {
-  //Function to create statistics text
-  const newStatsText = document.createElement("p");
-  newStatsText.style.display = "flex";
-  newStatsText.style.justifyContent = "center";
-  newStatsText.style.alignItems = "center";
-  newStatsText.style.height = "2vh";
-  newStatsText.style.fontSize = "20px";
-  return newStatsText;
-}
+const upgradeButton1: HTMLElement = createUpgradeButton(
+  `Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("auto").toFixed(2)})`,
+  "upgradeButton1",
+  "button_upgrade1",
+  "#e36862"
+);
+upgradeButton1.addEventListener("click", activateAutoChomper);
+app.appendChild(upgradeButton1); //Appending button to webpage app
+const autoChomperDescription: HTMLElement = createDescriptionText("auto");
+app.appendChild(autoChomperDescription);
 
-function createDescriptionText(descSource: string) {
-  //Function for creating chomper descriptions
-  const newDescription = document.createElement("p");
-  newDescription.style.display = "flex";
-  newDescription.style.justifyContent = "center";
-  newDescription.style.alignItems = "center";
-  newDescription.style.height = "2vh";
-  newDescription.style.fontSize = "12px";
-  newDescription.innerText = getChomperDescription(descSource);
-  return newDescription;
-}
+const upgradeButton2: HTMLElement = createUpgradeButton(
+  `Super Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("super").toFixed(2)})`,
+  "upgradeButton2",
+  "button_upgrade2",
+  "#ebe37a"
+);
+upgradeButton2.addEventListener("click", activateSuperChomper);
+app.appendChild(upgradeButton2); //Appending button to webpage app
+const superChomperDescription: HTMLElement = createDescriptionText("super");
+app.appendChild(superChomperDescription);
 
-function updateUpgradeButtonText(buttonName: string) {
-  if (buttonName === "auto") {
-    upgradeButton1.innerText = `Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("auto").toFixed(2)})`;
-  } else if (buttonName === "super") {
-    upgradeButton2.innerText = `Super Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("super").toFixed(2)})`;
-  } else if (buttonName === "giga") {
-    upgradeButton3.innerText = `Giga Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("giga").toFixed(2)})`;
-  } else if (buttonName === "tera") {
-    upgradeButton4.innerText = `Tera Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("tera").toFixed(2)})`;
-  } else {
-    upgradeButton5.innerText = `Monster Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("monster").toFixed(2)})`;
-  }
-}
+const upgradeButton3: HTMLElement = createUpgradeButton(
+  `Giga Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("giga").toFixed(2)})`,
+  "upgradeButton3",
+  "button_upgrade3",
+  "#7f86e3"
+);
+upgradeButton3.addEventListener("click", activateGigaChomper);
+app.appendChild(upgradeButton3); //Appending button to webpage app
+const gigaChomperDescription: HTMLElement = createDescriptionText("giga");
+app.appendChild(gigaChomperDescription);
 
-function getChomperCost(desiredChomper: string) {
-  //Function to find cost
-  for (const chomper of availableChompers) {
-    if (chomper.name === desiredChomper) {
-      return chomper.cost;
-    }
-  }
-  return 0;
-}
+const upgradeButton4: HTMLElement = createUpgradeButton(
+  `Tera Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("tera").toFixed(2)})`,
+  "upgradeButton4",
+  "button_upgrade4",
+  "#8bff87"
+);
+upgradeButton4.addEventListener("click", activateTeraChomper);
+app.appendChild(upgradeButton4); //Appending button to webpage app
+const teraChomperDescription: HTMLElement = createDescriptionText("tera");
+app.appendChild(teraChomperDescription);
 
-function getChomperRate(desiredChomper: string) {
-  //Function to find rate
-  for (const chomper of availableChompers) {
-    if (chomper.name === desiredChomper) {
-      return chomper.rate;
-    }
-  }
-  return 0;
-}
+const upgradeButton5: HTMLElement = createUpgradeButton(
+  `Monster Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("monster").toFixed(2)})`,
+  "upgradeButton5",
+  "button_upgrade5",
+  "#ff9729"
+);
+upgradeButton5.addEventListener("click", activateMonsterChomper);
+app.appendChild(upgradeButton5); //Appending button to webpage app
+const monsterChomperDescription: HTMLElement = createDescriptionText("monster");
+app.appendChild(monsterChomperDescription);
 
-function getChomperDescription(desiredChomper: string) {
-  //Function to find description
-  for (const chomper of availableChompers) {
-    if (chomper.name === desiredChomper) {
-      return chomper.description;
-    }
-  }
-  return "";
-}
+const upgradeButtonElement1 = document.getElementById(
+  "upgradeButton1"
+) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
+
+const upgradeButtonElement2 = document.getElementById(
+  "upgradeButton2"
+) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
+
+const upgradeButtonElement3 = document.getElementById(
+  "upgradeButton3"
+) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
+
+const upgradeButtonElement4 = document.getElementById(
+  "upgradeButton4"
+) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
+
+const upgradeButtonElement5 = document.getElementById(
+  "upgradeButton5"
+) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
+
+setInterval(checkCandyCount, 0); //Constantly check for availability of upgrades
+
+createStatisticsTitle();
+const autoRateText: HTMLElement = createStatsText();
+updateStatsText("rate");
+app.appendChild(autoRateText);
+
+const autoChomperStatsText: HTMLElement = createStatsText();
+const superChomperStatsText: HTMLElement = createStatsText();
+const gigaChomperStatsText: HTMLElement = createStatsText();
+const teraChomperStatsText: HTMLElement = createStatsText();
+const monsterChomperStatsText: HTMLElement = createStatsText();
+updateStatsText("auto");
+updateStatsText("super");
+updateStatsText("giga");
+updateStatsText("tera");
+updateStatsText("monster");
+app.appendChild(autoChomperStatsText);
+app.appendChild(superChomperStatsText);
+app.appendChild(gigaChomperStatsText);
+app.appendChild(teraChomperStatsText);
+app.appendChild(monsterChomperStatsText);
