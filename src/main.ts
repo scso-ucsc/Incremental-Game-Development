@@ -68,7 +68,7 @@ const availableChompers: AutoChomper[] = [
 ];
 
 //Main Functions
-function createStyle() {
+function createStyle(): void {
   const styleElementGrid = document.createElement("style");
   styleElementGrid.textContent = `
       body {
@@ -81,7 +81,7 @@ function createStyle() {
   app.appendChild(styleElementGrid);
 }
 
-function createCandyEatButton() {
+function createCandyEatButton(): void {
   const eatCandyButton = document.createElement("img");
   eatCandyButton.src = imageSource;
   eatCandyButton.id = "eatButton";
@@ -93,7 +93,7 @@ function createCandyEatButton() {
   eatCandyButton.addEventListener("click", increaseCandyCount);
 }
 
-function createCounter() {
+function createCounter(): HTMLElement {
   //Creating counter
   const newCounter = document.createElement("counter");
   newCounter.style.display = "flex";
@@ -112,7 +112,7 @@ function createUpgradeButton(
   id: string,
   className: string,
   bgColour: string
-) {
+): HTMLElement {
   const newButton = document.createElement("button"); //Creating button element
 
   newButton.innerText = innerText; //Assigning variables
@@ -122,7 +122,7 @@ function createUpgradeButton(
   return newButton;
 }
 
-function createStatisticsTitle() {
+function createStatisticsTitle(): void {
   const playerStatsTitle: HTMLElement = document.createElement("h2"); //Creating Statistics Elements
   playerStatsTitle.style.display = "flex";
   playerStatsTitle.style.justifyContent = "center";
@@ -133,7 +133,7 @@ function createStatisticsTitle() {
   app.appendChild(playerStatsTitle);
 }
 
-function createStatsText() {
+function createStatsText(): HTMLElement {
   const newStatsText = document.createElement("p");
   newStatsText.style.display = "flex";
   newStatsText.style.justifyContent = "center";
@@ -143,7 +143,7 @@ function createStatsText() {
   return newStatsText;
 }
 
-function createDescriptionText(descSource: string) {
+function createDescriptionText(descSource: string): HTMLElement {
   const newDescription = document.createElement("p");
   newDescription.style.display = "flex";
   newDescription.style.justifyContent = "center";
@@ -154,13 +154,13 @@ function createDescriptionText(descSource: string) {
   return newDescription;
 }
 
-function increaseCandyCount() {
+function increaseCandyCount(): void {
   //Increasing candyCount by 1 and then updating the counter text
   candyCount += 1;
   updateCountText(counter);
 }
 
-function increaseUpgradeCost(upgradeType: string) {
+function increaseUpgradeCost(upgradeType: string): void {
   for (const chomper of availableChompers) {
     if (chomper.name === upgradeType) {
       chomper.cost *= 1.15;
@@ -170,7 +170,7 @@ function increaseUpgradeCost(upgradeType: string) {
   }
 }
 
-function increaseFractionalCandyCount(timestamp: number) {
+function increaseFractionalCandyCount(timestamp: number): void {
   if (previousTimestamp === 0) {
     previousTimestamp = timestamp;
   }
@@ -190,7 +190,7 @@ function increaseFractionalCandyCount(timestamp: number) {
   requestAnimationFrame(increaseFractionalCandyCount); //Requesting next frame
 }
 
-function updateStatsText(upgradeType: string) {
+function updateStatsText(upgradeType: string): void {
   if (upgradeType === "rate") {
     autoRateText.innerText = `Current Growth Rate: ${currentGrowthRate.toFixed(1)} candies/sec`;
   } else if (upgradeType === "auto") {
@@ -206,7 +206,7 @@ function updateStatsText(upgradeType: string) {
   }
 }
 
-function updateUpgradeButtonText(buttonName: string) {
+function updateUpgradeButtonText(buttonName: string): void {
   if (buttonName === "auto") {
     upgradeButton1.innerText = `Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("auto").toFixed(2)})`;
   } else if (buttonName === "super") {
@@ -220,12 +220,12 @@ function updateUpgradeButtonText(buttonName: string) {
   }
 }
 
-function updateCountText(counter: HTMLElement) {
+function updateCountText(counter: HTMLElement): void {
   //Updating the counter text
   counter.innerText = "Candies Eaten: " + candyCount.toFixed(2).toString();
 }
 
-function checkCandyCount() {
+function checkCandyCount(): void {
   //Checks if player has eaten enough candy to purchase the respective upgrade
   if (candyCount >= getChomperCost("auto")) {
     upgradeButtonElement1.disabled = false;
@@ -258,7 +258,7 @@ function checkCandyCount() {
   }
 }
 
-function getChomperCost(desiredChomper: string) {
+function getChomperCost(desiredChomper: string): number {
   for (const chomper of availableChompers) {
     if (chomper.name === desiredChomper) {
       return chomper.cost;
@@ -267,7 +267,7 @@ function getChomperCost(desiredChomper: string) {
   return 0;
 }
 
-function getChomperRate(desiredChomper: string) {
+function getChomperRate(desiredChomper: string): number {
   for (const chomper of availableChompers) {
     if (chomper.name === desiredChomper) {
       return chomper.rate;
@@ -276,7 +276,7 @@ function getChomperRate(desiredChomper: string) {
   return 0;
 }
 
-function getChomperDescription(desiredChomper: string) {
+function getChomperDescription(desiredChomper: string): string {
   for (const chomper of availableChompers) {
     if (chomper.name === desiredChomper) {
       return chomper.description;
@@ -285,7 +285,7 @@ function getChomperDescription(desiredChomper: string) {
   return "";
 }
 
-function activateAutoChomper() {
+function activateAutoChomper(): void {
   autoChomperCount += 1;
   currentGrowthRate += getChomperRate("auto");
   candyCount -= getChomperCost("auto");
@@ -298,7 +298,7 @@ function activateAutoChomper() {
   increaseUpgradeCost("auto"); //Increasing Cost
 }
 
-function activateSuperChomper() {
+function activateSuperChomper(): void {
   superChomperCount += 1;
   currentGrowthRate += getChomperRate("super");
   candyCount -= getChomperCost("super");
@@ -311,7 +311,7 @@ function activateSuperChomper() {
   increaseUpgradeCost("super"); //Increasing Cost
 }
 
-function activateGigaChomper() {
+function activateGigaChomper(): void {
   gigaChomperCount += 1;
   currentGrowthRate += getChomperRate("giga");
   candyCount -= getChomperCost("giga");
@@ -324,7 +324,7 @@ function activateGigaChomper() {
   increaseUpgradeCost("giga"); //Increasing Cost
 }
 
-function activateTeraChomper() {
+function activateTeraChomper(): void {
   teraChomperCount += 1;
   currentGrowthRate += getChomperRate("tera");
   candyCount -= getChomperCost("tera");
@@ -337,7 +337,7 @@ function activateTeraChomper() {
   increaseUpgradeCost("tera"); //Increasing Cost
 }
 
-function activateMonsterChomper() {
+function activateMonsterChomper(): void {
   monsterChomperCount += 1;
   currentGrowthRate += getChomperRate("monster");
   candyCount -= getChomperCost("monster");
