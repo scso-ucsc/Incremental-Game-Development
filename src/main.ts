@@ -119,6 +119,7 @@ function createUpgradeButton(
   newButton.id = id;
   newButton.className = className;
   newButton.style.backgroundColor = bgColour;
+  app.appendChild(newButton);
   return newButton;
 }
 
@@ -140,6 +141,7 @@ function createStatsText(): HTMLElement {
   newStatsText.style.alignItems = "center";
   newStatsText.style.height = "2vh";
   newStatsText.style.fontSize = "20px";
+  app.appendChild(newStatsText);
   return newStatsText;
 }
 
@@ -151,6 +153,7 @@ function createDescriptionText(descSource: string): HTMLElement {
   newDescription.style.height = "2vh";
   newDescription.style.fontSize = "12px";
   newDescription.innerText = getChomperDescription(descSource);
+  app.appendChild(newDescription);
   return newDescription;
 }
 
@@ -175,15 +178,12 @@ function increaseFractionalCandyCount(timestamp: number): void {
     previousTimestamp = timestamp;
   }
 
-  //Calculating the amount of time since the previous frame
-  const timeElapsed = timestamp - previousTimestamp;
+  const timeElapsed = timestamp - previousTimestamp; //Calculating the amount of time since the previous frame
   previousTimestamp = timestamp;
 
-  //Incrementing based on passed time
-  const increment = (timeElapsed / 1000) * currentGrowthRate;
+  const increment = (timeElapsed / 1000) * currentGrowthRate; //Incrementing based on passed time
   candyCount += increment;
 
-  //Updating counter
   if (counter) {
     updateCountText(counter);
   }
@@ -221,12 +221,19 @@ function updateUpgradeButtonText(buttonName: string): void {
 }
 
 function updateCountText(counter: HTMLElement): void {
-  //Updating the counter text
   counter.innerText = "Candies Eaten: " + candyCount.toFixed(2).toString();
 }
 
+function updateAllStatsText(): void {
+  updateStatsText("rate");
+  updateStatsText("auto");
+  updateStatsText("super");
+  updateStatsText("giga");
+  updateStatsText("tera");
+  updateStatsText("monster");
+}
+
 function checkCandyCount(): void {
-  //Checks if player has eaten enough candy to purchase the respective upgrade
   if (candyCount >= getChomperCost("auto")) {
     upgradeButtonElement1.disabled = false;
   } else {
@@ -285,6 +292,10 @@ function getChomperDescription(desiredChomper: string): string {
   return "";
 }
 
+function setHTMLButtonElement(desiredID: string): HTMLButtonElement {
+  return document.getElementById(desiredID) as HTMLButtonElement;
+}
+
 function activateAutoChomper(): void {
   autoChomperCount += 1;
   currentGrowthRate += getChomperRate("auto");
@@ -293,9 +304,9 @@ function activateAutoChomper(): void {
     requestAnimationFrame(increaseFractionalCandyCount); //Activating automatic increments if not active yet
     autoGrowth = true;
   }
-  updateStatsText("rate"); //Updating Stats
+  updateStatsText("rate");
   updateStatsText("auto");
-  increaseUpgradeCost("auto"); //Increasing Cost
+  increaseUpgradeCost("auto");
 }
 
 function activateSuperChomper(): void {
@@ -306,9 +317,9 @@ function activateSuperChomper(): void {
     requestAnimationFrame(increaseFractionalCandyCount); //Activating automatic increments if not active yet
     autoGrowth = true;
   }
-  updateStatsText("rate"); //Updating Stats
+  updateStatsText("rate");
   updateStatsText("super");
-  increaseUpgradeCost("super"); //Increasing Cost
+  increaseUpgradeCost("super");
 }
 
 function activateGigaChomper(): void {
@@ -319,9 +330,9 @@ function activateGigaChomper(): void {
     requestAnimationFrame(increaseFractionalCandyCount); //Activating automatic increments if not active yet
     autoGrowth = true;
   }
-  updateStatsText("rate"); //Updating Stats
+  updateStatsText("rate");
   updateStatsText("giga");
-  increaseUpgradeCost("giga"); //Increasing Cost
+  increaseUpgradeCost("giga");
 }
 
 function activateTeraChomper(): void {
@@ -332,9 +343,9 @@ function activateTeraChomper(): void {
     requestAnimationFrame(increaseFractionalCandyCount); //Activating automatic increments if not active yet
     autoGrowth = true;
   }
-  updateStatsText("rate"); //Updating Stats
+  updateStatsText("rate");
   updateStatsText("tera");
-  increaseUpgradeCost("tera"); //Increasing Cost
+  increaseUpgradeCost("tera");
 }
 
 function activateMonsterChomper(): void {
@@ -345,12 +356,12 @@ function activateMonsterChomper(): void {
     requestAnimationFrame(increaseFractionalCandyCount); //Activating automatic increments if not active yet
     autoGrowth = true;
   }
-  updateStatsText("rate"); //Updating Stats
+  updateStatsText("rate");
   updateStatsText("monster");
-  increaseUpgradeCost("monster"); //Increasing Cost
+  increaseUpgradeCost("monster");
 }
 
-//Creating Grid, Counter and Buttons
+//Creating Grid, Counter, Buttons, and Text
 createStyle();
 createCandyEatButton();
 const counter: HTMLElement = createCounter();
@@ -362,9 +373,7 @@ const upgradeButton1: HTMLElement = createUpgradeButton(
   "#e36862"
 );
 upgradeButton1.addEventListener("click", activateAutoChomper);
-app.appendChild(upgradeButton1); //Appending button to webpage app
-const autoChomperDescription: HTMLElement = createDescriptionText("auto");
-app.appendChild(autoChomperDescription);
+createDescriptionText("auto");
 
 const upgradeButton2: HTMLElement = createUpgradeButton(
   `Super Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("super").toFixed(2)})`,
@@ -373,9 +382,7 @@ const upgradeButton2: HTMLElement = createUpgradeButton(
   "#ebe37a"
 );
 upgradeButton2.addEventListener("click", activateSuperChomper);
-app.appendChild(upgradeButton2); //Appending button to webpage app
-const superChomperDescription: HTMLElement = createDescriptionText("super");
-app.appendChild(superChomperDescription);
+createDescriptionText("super");
 
 const upgradeButton3: HTMLElement = createUpgradeButton(
   `Giga Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("giga").toFixed(2)})`,
@@ -384,9 +391,7 @@ const upgradeButton3: HTMLElement = createUpgradeButton(
   "#7f86e3"
 );
 upgradeButton3.addEventListener("click", activateGigaChomper);
-app.appendChild(upgradeButton3); //Appending button to webpage app
-const gigaChomperDescription: HTMLElement = createDescriptionText("giga");
-app.appendChild(gigaChomperDescription);
+createDescriptionText("giga");
 
 const upgradeButton4: HTMLElement = createUpgradeButton(
   `Tera Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("tera").toFixed(2)})`,
@@ -395,9 +400,7 @@ const upgradeButton4: HTMLElement = createUpgradeButton(
   "#8bff87"
 );
 upgradeButton4.addEventListener("click", activateTeraChomper);
-app.appendChild(upgradeButton4); //Appending button to webpage app
-const teraChomperDescription: HTMLElement = createDescriptionText("tera");
-app.appendChild(teraChomperDescription);
+createDescriptionText("tera");
 
 const upgradeButton5: HTMLElement = createUpgradeButton(
   `Monster Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("monster").toFixed(2)})`,
@@ -406,49 +409,22 @@ const upgradeButton5: HTMLElement = createUpgradeButton(
   "#ff9729"
 );
 upgradeButton5.addEventListener("click", activateMonsterChomper);
-app.appendChild(upgradeButton5); //Appending button to webpage app
-const monsterChomperDescription: HTMLElement = createDescriptionText("monster");
-app.appendChild(monsterChomperDescription);
+createDescriptionText("monster");
 
-const upgradeButtonElement1 = document.getElementById(
-  "upgradeButton1"
-) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
-
-const upgradeButtonElement2 = document.getElementById(
-  "upgradeButton2"
-) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
-
-const upgradeButtonElement3 = document.getElementById(
-  "upgradeButton3"
-) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
-
-const upgradeButtonElement4 = document.getElementById(
-  "upgradeButton4"
-) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
-
-const upgradeButtonElement5 = document.getElementById(
-  "upgradeButton5"
-) as HTMLButtonElement; //Setting upgradeButtonElement variable for enable/disabled feature
+const upgradeButtonElement1 = setHTMLButtonElement("upgradeButton1");
+const upgradeButtonElement2 = setHTMLButtonElement("upgradeButton2");
+const upgradeButtonElement3 = setHTMLButtonElement("upgradeButton3");
+const upgradeButtonElement4 = setHTMLButtonElement("upgradeButton4");
+const upgradeButtonElement5 = setHTMLButtonElement("upgradeButton5");
 
 setInterval(checkCandyCount, 0); //Constantly check for availability of upgrades
 
 createStatisticsTitle();
 const autoRateText: HTMLElement = createStatsText();
-updateStatsText("rate");
-app.appendChild(autoRateText);
-
 const autoChomperStatsText: HTMLElement = createStatsText();
 const superChomperStatsText: HTMLElement = createStatsText();
 const gigaChomperStatsText: HTMLElement = createStatsText();
 const teraChomperStatsText: HTMLElement = createStatsText();
 const monsterChomperStatsText: HTMLElement = createStatsText();
-updateStatsText("auto");
-updateStatsText("super");
-updateStatsText("giga");
-updateStatsText("tera");
-updateStatsText("monster");
-app.appendChild(autoChomperStatsText);
-app.appendChild(superChomperStatsText);
-app.appendChild(gigaChomperStatsText);
-app.appendChild(teraChomperStatsText);
-app.appendChild(monsterChomperStatsText);
+
+updateAllStatsText();
