@@ -103,7 +103,7 @@ function createUpgradeButton(
   innerText: string,
   id: string,
   className: string,
-  bgColour: string,
+  bgColour: string
 ): HTMLElement {
   const newButton = document.createElement("button"); //Creating button element
 
@@ -362,7 +362,7 @@ const upgradeButton1: HTMLElement = createUpgradeButton(
   `Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("auto").toFixed(2)})`,
   "upgradeButton1",
   "button_upgrade1",
-  "#e36862",
+  "#e36862"
 );
 upgradeButton1.addEventListener("click", activateAutoChomper);
 createDescriptionText("auto");
@@ -371,7 +371,7 @@ const upgradeButton2: HTMLElement = createUpgradeButton(
   `Super Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("super").toFixed(2)})`,
   "upgradeButton2",
   "button_upgrade2",
-  "#ebe37a",
+  "#ebe37a"
 );
 upgradeButton2.addEventListener("click", activateSuperChomper);
 createDescriptionText("super");
@@ -380,7 +380,7 @@ const upgradeButton3: HTMLElement = createUpgradeButton(
   `Giga Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("giga").toFixed(2)})`,
   "upgradeButton3",
   "button_upgrade3",
-  "#7f86e3",
+  "#7f86e3"
 );
 upgradeButton3.addEventListener("click", activateGigaChomper);
 createDescriptionText("giga");
@@ -389,7 +389,7 @@ const upgradeButton4: HTMLElement = createUpgradeButton(
   `Tera Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("tera").toFixed(2)})`,
   "upgradeButton4",
   "button_upgrade4",
-  "#8bff87",
+  "#8bff87"
 );
 upgradeButton4.addEventListener("click", activateTeraChomper);
 createDescriptionText("tera");
@@ -398,7 +398,7 @@ const upgradeButton5: HTMLElement = createUpgradeButton(
   `Monster Automatic 🍬 Chomper!!! (Cost: ${getChomperCost("monster").toFixed(2)})`,
   "upgradeButton5",
   "button_upgrade5",
-  "#ff9729",
+  "#ff9729"
 );
 upgradeButton5.addEventListener("click", activateMonsterChomper);
 createDescriptionText("monster");
