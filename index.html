@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
     <style>
-      .floating-title{
-        animation: float 1s ease-in-out infinite, wiggle 0.5s ease-in-out infinite;
+      .floating-title {
+        animation:
+          float 1s ease-in-out infinite,
+          wiggle 0.5s ease-in-out infinite;
         display: inline-block;
       }
       @keyframes float {
@@ -20,8 +22,9 @@
           transform: translateY(0px);
         }
       }
-      @keyframes wiggle{
-        0%, 100% {
+      @keyframes wiggle {
+        0%,
+        100% {
           transform: rotate(0deg);
         }
         25% {
@@ -35,24 +38,24 @@
       body {
         animation: backgroundChange 10s infinite alternate;
       }
-      @keyframes backgroundChange{
-        0%{
+      @keyframes backgroundChange {
+        0% {
           background-color: #ecc9f2;
         }
-        33%{
+        33% {
           background-color: #c2ecff;
         }
-        66%{
+        66% {
           background-color: #ffe3b0;
         }
-        100%{
+        100% {
           background-color: #ffb0b7;
         }
       }
     </style>
   </head>
   <body>
-    <h1 class = "floating-title">🍬 EAT THE CANDY!!! 🍬</h1>
+    <h1 class="floating-title">🍬 EAT THE CANDY!!! 🍬</h1>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
