@@ -3,14 +3,6 @@ import imageSource from "./eat_candy.png";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
-const gameName = "🍬 EAT THE CANDY!!! 🍬";
-document.title = gameName;
-document.body.style.backgroundColor = "#ecc9f2";
-
-const header = document.createElement("h1");
-header.innerHTML = gameName;
-app.append(header);
-
 //Creating Global Variables
 let candyCount: number = 0;
 let autoChomperCount: number = 0;
